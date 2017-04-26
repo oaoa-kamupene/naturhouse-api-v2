@@ -1,0 +1,566 @@
+FORMAT: 1A
+HOST: https://jak-zhubnout-dieta.cz/
+
+# Naturhouse API v2
+
+
+## Data Structures
+
+### `OAuth grant request` (object)
++ `grant_type`: `password` (string, required)
++ `client_id`: `1_611yogt6e8sgwg0c8cogs4sooo0skw8c4400404ck0cowgcg0g` (string, required)
++ `client_secret`: `5thhvnqv8uwwcgcc0gwg4k08wsw8cosgkwk0woksc8www4044` (string, required)
++ `username`: `demo` (string, optional)
++ `password`: `demo` (string, optional)
+
+### `OAuth jwt-bearer grant request` (object)
++ `grant_type`: `urn:ietf:params:oauth:grant-type:jwt-bearer` (string, required)
++ assertion: `eyJhbGciOiJIUzI1NiJ9.e30.XmNK3GpH3Ys_7wsYBfq4C3M6goz71I7dTgUkuIa5lyQ` (string, required)
+
+### `OAuth valid response` (object)
++ `access_token`: `eyJhbGciOiJIUzI1NiJ9.e30.XmNK3GpH3Ys_7wsYBfq4C3M6goz71I7dTgUkuIa5lyQ` (string, required) - valid JWT
++ scope: null
++ `expires_in`: 3600 (number, required)
++ `token_type`: bearer (string, required)
++ `refresh_token`: `NzNmMDJkODFlNDk3N2YwOTZkMzhlZGNjNjBlMzMzMjNjOTkyZDI1YTU5ODQyMGNiYjk3YjM2OGFiYzM2ZGQzYQ`
+
+### Contact
++ fname: `test` (string, required) - First name
++ lname: `test` (string, required) - Last name
++ phone: `0777777777` (string, required) - Phone (format XXXXXXXXX or +XXXXXXXXXXXX without spaces) by default prefix +420 is added
++ email: `test@test.cz` (string, required) - Email (email has validation just for format)
++ branch: `87` (number, required) - Branch id from list of branches
++ call_time: `1` (optional) - Contact time ID
++ zip: `11000` (optional) - ZIP code
++ package: `0` (optional, number) - Package/Product ID (possible values 1-7)
++ interest: `-1` (optional, enum) - contact intent to
+    + `-1` - reduce weight
+    + `0` - stabelization of weight
+    + `1` - increasing weight
++ source: `1` (optional, number) - contact source (Elevated permissions required)
++ verified: `1` (optional, number) - Contact phone is verified by SMS
++ sex: `0` (enum, optional) - sex
+    + `0` - male 
+    + `1` - female 
++ yob: `1982` (optional, number) - year of birth
++ weight: `150` (optional, number) - contact weight [kg]
++ target_weight: `55` (optional, number) - target weight [kg]
++ height: `155` (optional, number) - height [cm]
++ job: `programmer` (string) - job
++ health: `bad` (string) - contact health
++ activities: `none` (string) - contact activities (like sports, free time...)
++ utm_medium: `none` (optional, string) - utm medium
++ utm_term: `none` (optional, string) - utm term
++ utm_content: `none` (optional, string) - utm content (is suitable for stats)
++ utm_campaign: `none` (optional, string) - utm campaign (is suitable for stats)
+
+###201Created
++ message: `new client created` (string)
++ contact_id: `1234` (number)
+
+###304NotModified
++ message: `contact already exists` (string)
++ contact_id: `1234` (number)
+
+### 401MissingToken
++ message: `authorization token is missing` (string)
+
+### 403InvalidToken
++ message: `invalid token` (string)
+
+### 404NotFound
++ message: `contact_id not found` (string)
++ receipt_id: `1234` (number)
+
+
+
+## Authorization & Authentification [/oauth/v2/token]
+
+The Naturhouse API uses [OAuth 2.0](http://oauth.net/2/) for authentication or `X-Auth-Token` static token provided by administrator. Static token requres allowed client IP.
+
+
+### Acces Token Request [POST] 
+
++ Request
+    + Attributes (OAuth grant request)
+    
+    + Body
+        
+            {
+                "grant_type": "password",
+                "client_id": "1_611yogt6e8sgwg0c8cogs4sooo0skw8c4400404ck0cowgcg0g",
+                "client_secret": "5thhvnqv8uwwcgcc0gwg4k08wsw8cosgkwk0woksc8www4044",
+                "username":"demo",
+                "password": "demo"
+            }
+
++ Response 200 (application/json)
+    + Attributes (OAuth valid response)
+       
+
++ Request
+    + Attributes (OAuth jwt-bearer grant request)
+
++ Response 200 (application/json)
+    + Attributes (OAuth valid response)
+    
++ Response 400 (application/json)
+
+    400 Bad request
+    List of error codes
+
+    | Error Descriptions                                 |
+    | ---------------------------------------------------| 
+    | Invalid grant_type parameter or parameter missing  |
+    | The client credentials are invalid                 |            
+    | Invalid username and password combination          | 
+
+    + Body
+
+            {
+                "error": "invalid_request",
+                "error_description": "Invalid grant_type parameter or parameter missing"
+            }
+            
+            
+
+
+## Branches [/api/v2/branches]
+
+Returns list of Naturhouse branches. Unique branch id is required for successful contact creation.
+
+### List of branches [GET /api/v2/branches{?active}]
+
++ Parameters
+
+     + active: `0` (optional, number) - all active branches
+        + 0 - all active branches
+        + 1 - only active branches with positive credit 
+        + 2 - all branches, inactive included (discuss this usage with responsible person)
+
++ Response 200 (application/json)
+
+    + Headers
+    
+            X-Total-Count: 3
+
+    + Body
+
+            {
+                "branches": 
+                [
+                    {
+                        "id": "3",
+                        "new_contract": "1",
+                        "sections": "1",
+                        "region": "Hlavní město Praha",
+                        "name": "Praha 3 - Flora",
+                        "person": "Martina Divišová",
+                        "company_name": "NATURHOUSE - Chrudimská",
+                        "email": "chrudimska@naturhouse-cz.cz",
+                        "phone": "604 703 005",
+                        "full": "0",
+                        "city": "Praha 3",
+                        "street": "Chrudimská 7",
+                        "zip": "13000",
+                        "color": "#78D958",
+                        "lat": "50.0772793",
+                        "lon": "14.4620468"
+                    },
+                    {
+                        "id": "4",
+                        "new_contract": "1",
+                        "sections": "1",
+                        "region": "Liberecký kraj",
+                        "name": "Turnov",
+                        "person": "Lenka Tomčo",
+                        "company_name": "NATURHOUSE - Turnov",
+                        "email": "turnov@naturhouse-cz.cz",
+                        "phone": "488 578 801",
+                        "full": "0",
+                        "city": "Turnov",
+                        "street": "Hluboká 280",
+                        "zip": "51101",
+                        "color": "#78D958",
+                        "lat": "50.587285",
+                        "lon": "15.1568091"
+                    },
+                    {
+                        "id": "5",
+                        "new_contract": "0",
+                        "sections": "1",
+                        "region": "Jihomoravský kraj",
+                        "name": "Brno - OC Olympie",
+                        "person": null,
+                        "company_name": "NATURHOUSE - Brno Olympie",
+                        "email": "brno.olympia@naturhouse-cz.cz",
+                        "phone": "513 033 029",
+                        "full": "0",
+                        "city": "Modřice, Brno",
+                        "street": "U dálnice 777",
+                        "zip": "66442",
+                        "color": "#78D958",
+                        "lat": "49.1950602",
+                        "lon": "16.6068371"
+                    }
+                ]
+            }
+
++ Response 500 (text/plain)
+
+    500 Server error
+    + Body
+    
++ Response 520 (text/plain)
+
+    520 Unknown error
+    + Body
+    
++ Response 524 (text/plain)
+
+    524 Server side timeout
+    + Body
+    
+
+## Contact Times [/contacttimes]
+<a name="contacttimes"></a>
+
+This is list of possible values for ```call_time``` field in contact creation.
+
+### List of Contact Times [GET]
+
+
++ Response 200 (application/json)
+ 
+    + Headers
+    
+            X-Total-Count: 3
+ 
+ 
+    + Body
+
+            {
+                "times": [
+                    {
+                        "id": 0,
+                        "text": "kdykoli"
+                    },
+                    {
+                        "id": 8,
+                        "text": "dopoledne"
+                    },
+                    {
+                        "id": 9,
+                        "text": "odpoledne"
+                    }
+                ]
+            }
+            
+## Contact [/api/v2/contact]
+
+
+### Create new contact [POST]
+
++ Request
+
+    + Header
+
+            Authorization: Bearer <access-token>
+
+    + Body
+    
+            {
+                "fname": "Jmeno",
+                "lname": "Prijmeni",
+                "phone": "777111222",
+                "email": "test@affiliate.cz",
+                "branch": 3
+            }
+
++ Attributes (Contact)
+
++ Response 201 (application/json)
+
+    + Attributes (201Created)
+    
++ Response 304 (application/json)
+
+    304 Response sent when the identical contact already exists
+    + Attributes (304NotModified)
+            
+
++ Request
+
+    + Header
+
+            Authorization: Bearer <access-token>
+
+    + Body
+    
+            {
+                "fname": "Jmeno",
+                "lname": "Prijmeni"
+            }
+
++ Response 400 (application/json)
+
+    400 Missing or invalid data, complete request will be saved to the error log 
+    List of error codes
+
+    | Code      | Requeue    | Note                         
+    | --------- | ---------- | -----------------------------
+    | 10        |    NO      | Missing required fields
+    | 11        |    NO      | Invalid phone format
+    | 12        |    NO      | Invalid email format
+    | 13        |    NO      | Invalid call time id
+    | 14        |    NO      | Invalid branch id
+    | 15        |    NO      | Invalid ZIP format
+    | 16        |    NO      | Invalid Interest format
+    | 17        |    NO      | Invalid Sex format
+    | 18        |    NO      | Invalid Source format
+    | 20        |    NO      | Branch is not exist or is not active
+
+    + Body
+
+            {
+                "errors":
+                [
+                    {
+                        "code": 10,
+                        "message": "Missing required fields"
+                    },
+                    {
+                        "code": 11,
+                        "message": "Invalid phone format"
+                    }
+                ]
+            }
+            
++ Response 401 (application/json)
+
+    401 Response sent when the Token is Missing
+    + Attributes (401MissingToken)
+
++ Response 403 (application/json)
+
+    403 Response sent when the token sent is invalid
+    + Attributes (403InvalidToken)
+           
++ Response 500 (text/plain)
+
+    500 Server error
+    + Body
+    
++ Response 520 (text/plain)
+
+    520 Unknown error
+    + Body
+    
++ Response 524 (text/plain)
+
+    524 Server side timeout
+    + Body
+    
+    
+### Get Contact [GET /api/v2/contact{?id}] 
+
+
+#### Contact status - possible values
+
+| Contact status  | Note                                                                         
+| --------------- | ---------------------------------------------
+| new             | New client (not evaluated yet)
+| bussy           | Client not responding to phone calls                                                     |
+| valid           | Ordered client                                            
+| discard         | The Client is not interested
+| finished        | The Client with completed procedure
+| refund_request  | Request to Client reclamation
+| refund          | Reclamated contact
+
+
++ Parameters
+
+    + id: `1234` (required, number) - contact id 
+
++ Request
+
+    + Header
+
+            Authorization: Bearer <access-token>
+            X-Auth-Token: aGVzbG86aGVzbG8=
+
++ Response 200 (application/json)
+ 
+    + Body
+    
+            {
+                "id": "167312",
+                "state": "valid",
+                "first_visit_from": "2017-04-23T12:00:00.511Z",
+                "first_visit_to": "2017-04-23T12:15:00.511Z",
+                "first_visit_visited": 0,
+                "reordered": "0",
+                "note": "",
+                "full_name": "Jmeno Prijmeni",
+                "created": "2017-04-22T18:25:43.511Z",
+                "last_modified": "2017-04-23T18:25:43.511Z"
+            }
+
+    
++ Response 400 (application/json)
+
+    400 Missing or invalid parameters
+
+    | Code      | Requeue    | Note                                                                          |
+    | --------- | ---------- | ----------------------------------------------------------------------------- |
+    | 10        |    NO      |   Missing required attribute                                                  |
+    | 11        |    NO      |   Invalid datetime format                                                     |
+    | 12        |    NO      |   From is greater or equal like To                                            |
+
+    + Body
+
+            {
+                "errors":
+                [
+                    {
+                    "code": 10,
+                    "message": "Missing required attribute"
+                    }
+                ]
+            }
+
++ Response 404 (application/json)
+
+    404 Response sent when contact id not found
+    
+    + Body
+
+            {
+                "message": "Contact ID not found"
+            }
+        
+
++ Response 401 (application/json)
+
+    401 Response sent when the Token is Missing
+    + Attributes (401MissingToken)
+
++ Response 403 (application/json)
+
+    403 Response sent when the token sent is invalid
+    + Attributes (403InvalidToken)
+           
++ Response 500 (text/plain)
+
+    500 Server error
+    + Body
+    
++ Response 520 (text/plain)
+
+    520 Unknown error
+    + Body
+    
++ Response 524 (text/plain)
+
+    524 Server side timeout
+    + Body
+    
+
+
+## Contacts [/api/v2/contacts]
+    
+### Get list of contacts [GET /api/v2/contacts{?lastModified}{?createdFrom,createdTo}{?page}{?limit}] 
+
+This endpoint will provide only contacts related to API credentials.
+```lastModified``` or ```createdFrom + createdTo``` range is required.
+
+
++ Parameters
+
+    + lastModified: `2017-04-23T18:25:43.511Z` (string) - last modified date (the return will contain contacts modified after this datetime)
+    + createdFrom: `2017-04-22T18:25:43.511Z` (string)
+    + createdTo: `2017-04-25T18:25:43.511Z` (string)
+    + page: `1` (optional, number) - page of result
+    + limit: `50` (optional, number) - limit results
+
++ Request
+
+    + Header
+
+            Authorization: Bearer <access-token>
+            X-Auth-Token: aGVzbG86aGVzbG8=rs
+
++ Response 200 (application/json)
+
+    + Header
+    
+            X-Total-Count: 1
+            X-Pages: 1
+            X-Page: 1
+ 
+    + Body
+    
+            {
+                "contacts": [
+                    {
+                        "id": "167312",
+                        "state": "valid",
+                        "first_visit_from": "2017-04-23T12:30:00.511Z",
+                        "first_visit_to": "2017-04-23T12:45:00.511Z",
+                        "first_visit_visited": 0,
+                        "reordered": "0",
+                        "note": "",
+                        "full_name": "Jmeno Prijmeni",
+                        "created": "2017-04-22T18:25:43.511Z",
+                        "last_modified": "2017-04-22T19:25:43.511Z"
+                    }
+                ]
+            }
+
+    
++ Response 400 (application/json)
+
+    400 Missing or invalid parameters
+
+    | Code      | Requeue    | Note                                                                          |
+    | --------- | ---------- | ----------------------------------------------------------------------------- |
+    | 10        |    NO      |   Missing required attribute                                                  |
+    | 11        |    NO      |   Invalid datetime format                                                     |
+    | 12        |    NO      |   From is greater or equal like To                                            |
+
+    + Body
+
+            {
+                "errors":
+                [
+                    {
+                    "code": 10,
+                    "message": "Missing required attribute"
+                    }
+                ]
+            }
+
++ Response 401 (application/json)
+
+    401 Response sent when the Token is Missing
+    + Attributes (401MissingToken)
+
++ Response 403 (application/json)
+
+    403 Response sent when the token sent is invalid
+    + Attributes (403InvalidToken)
+           
++ Response 500 (text/plain)
+
+    500 Server error
+    + Body
+    
++ Response 520 (text/plain)
+
+    520 Unknown error
+    + Body
+    
++ Response 524 (text/plain)
+
+    524 Server side timeout
+    + Body
