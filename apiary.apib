@@ -327,11 +327,18 @@ This is list of possible values for ```call_time``` field in contact creation.
                 [
                     {
                         "code": 10,
+                        "field": "phone,email,branch",
                         "message": "Missing required fields"
                     },
                     {
                         "code": 11,
+                        "field": "phone",
                         "message": "Invalid phone format"
+                    },
+                    {
+                        "code": 12,
+                        "field": "email",
+                        "message": "Invalid email format"
                     }
                 ]
             }
