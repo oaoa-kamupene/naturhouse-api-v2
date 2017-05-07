@@ -309,6 +309,7 @@ This is list of possible values for ```call_time``` field in contact creation.
 
     | Code      | Requeue    | Note                         
     | --------- | ---------- | -----------------------------
+    |  1        |    NO      | Invalid input data, check JSON format please
     | 10        |    NO      | Missing required field
     | 11        |    NO      | Invalid phone format
     | 12        |    NO      | Invalid email format
@@ -319,6 +320,7 @@ This is list of possible values for ```call_time``` field in contact creation.
     | 17        |    NO      | Invalid Sex format
     | 18        |    NO      | Invalid Source format
     | 20        |    NO      | Branch is not exist or is not active
+    | 21        |    NO      | Branch ID must be set if contact verified is 1
 
     + Body
 
