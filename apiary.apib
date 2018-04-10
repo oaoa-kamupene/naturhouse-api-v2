@@ -24,6 +24,11 @@ HOST: https://jak-zhubnout-dieta.cz/
 + `token_type`: bearer (string, required)
 + `refresh_token`: `NzNmMDJkODFlNDk3N2YwOTZkMzhlZGNjNjBlMzMzMjNjOTkyZDI1YTU5ODQyMGNiYjk3YjM2OGFiYzM2ZGQzYQ`
 
+### Package
++ package_id: `1` (number)
++ paid: `true` (boolean)
+
+
 ### Contact
 + fname: `test` (string, required) - First name
 + lname: `test` (string, required) - Last name
@@ -32,8 +37,10 @@ HOST: https://jak-zhubnout-dieta.cz/
 + branch: `87` (number, required) - Branch id from list of branches
 + call_time: `1` (optional) - Contact time ID
 + zip: `11000` (optional) - ZIP code
-+ package: `0` (optional, number) - Package/Product ID (possible values 1-7)
-+ package_paid: `350` (optional, number) - Total price, already paid
++ packages (array[Package], fixed)
+    + (object)
+        + package_id: 4
+        + paid: false
 + interest: `-1` (optional, enum) - contact intent to
     + `-1` - reduce weight
     + `0` - stabelization of weight
@@ -259,7 +266,73 @@ This is list of possible values for ```call_time``` field in contact creation.
                     }
                 ]
             }
-            
+
+
+## Packages [/api/v2/packages]
+
+Returns list of Naturhouse available packages.
+
+### List of packages [GET /api/v2/packages]
+
++ Response 200 (application/json)
+
+    + Headers
+    
+            X-Total-Count: 5
+
+    + Body
+
+            {
+                "packages": 
+                [
+                    {
+                        "id": 1,
+                        "name": "Chci ploché břicho!",
+                        "total_price": 1626.0,
+                        "formatted_price": "1 626,00 Kč"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Chci ploché břicho! - řešení pro muže",
+                        "total_price": 1605.0,
+                        "formatted_price": "1 605,00 Kč"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Lehké nohy",
+                        "total_price": 1435.0,
+                        "formatted_price": "1 435,00 Kč"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Hubnutí a detoxikace",
+                        "total_price": 1659.0,
+                        "formatted_price": "1 659,00 Kč"
+                    },
+                    {
+                        "id": 5,
+                        "name": "Sbohem, celulitido!",
+                        "total_price": 1457.0,
+                        "formatted_price": "1 457,00 Kč"
+                    },
+                ]
+            }
+
++ Response 500 (text/plain)
+
+    500 Server error
+    + Body
+    
++ Response 520 (text/plain)
+
+    520 Unknown error
+    + Body
+    
++ Response 524 (text/plain)
+
+    524 Server side timeout
+    + Body
+
 ## Contact [/api/v2/contact]
 
 
