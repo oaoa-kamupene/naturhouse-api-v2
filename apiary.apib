@@ -39,8 +39,8 @@ HOST: https://jak-zhubnout-dieta.cz/
 + zip: `11000` (optional) - ZIP code
 + packages (array[Package], fixed)
     + (object)
-        + package_id: 4
-        + paid: false
+        + package_id: 4 (number)
+        + paid: false (boolean)
 + interest: `-1` (optional, enum) - contact intent to
     + `-1` - reduce weight
     + `0` - stabelization of weight
@@ -352,6 +352,16 @@ Returns list of Naturhouse available packages.
                 "lname": "Prijmeni",
                 "phone": "777111222",
                 "email": "test@affiliate.cz",
+                "packages": [
+                    {
+                        "package_id": 1,
+                        "paid": true
+                    },
+                    {
+                        "package_id": 4,
+                        "paid": false
+                    }
+                ],
                 "branch": 3
             }
 
