@@ -24,6 +24,16 @@ HOST: https://jak-zhubnout-dieta.cz/
 + `token_type`: bearer (string, required)
 + `refresh_token`: `NzNmMDJkODFlNDk3N2YwOTZkMzhlZGNjNjBlMzMzMjNjOTkyZDI1YTU5ODQyMGNiYjk3YjM2OGFiYzM2ZGQzYQ`
 
+### PackageItem
++ id: `1` (number) - Unique id of package
++ name: `Balicek` (string) - Package name
++ total_price: `100.0` (number) - float price VAT included
++ formatted_price: `100,00 Kč` (string) - formatted price including VAT and currency
+
+
+### PackageList
++ packages (array[PackageItem])
+        
 ### Package
 + package_id: `1` (number)
 + paid: `true` (boolean)
@@ -273,6 +283,8 @@ This is list of possible values for ```call_time``` field in contact creation.
 Returns list of Naturhouse available packages.
 
 ### List of packages [GET /api/v2/packages]
+
++ Attributes(PackageList)
 
 + Response 200 (application/json)
 
