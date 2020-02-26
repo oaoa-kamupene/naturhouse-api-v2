@@ -9,7 +9,7 @@ class Branch extends BaseEntity
     /**
      *   https://naturhouseapiv2.docs.apiary.io/#reference/0/branches/list-of-branches
      *
-     * @example
+     * @examples
      *   id    72
      *   new_contract    1
      *   sections    1

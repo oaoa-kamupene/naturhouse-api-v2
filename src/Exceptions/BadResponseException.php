@@ -4,7 +4,7 @@
 namespace Naturhouse\Exceptions;
 
 
-class BadResponseException
+class BadResponseException extends \Exception
 {
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Naturhouse\entities;
+namespace Naturhouse\Entities;
 
 
 class ContactTime extends BaseEntity
@@ -25,14 +25,6 @@ class ContactTime extends BaseEntity
     }
 
     /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return string
      */
     public function getText()
@@ -41,12 +33,23 @@ class ContactTime extends BaseEntity
     }
 
     /**
-     * @param string $text
+     * @param int $id
+     * @return ContactTime
      */
-    public function setText($text)
+    public function setId(int $id): ContactTime
     {
-        $this->text = $text;
+        $this->id = $id;
+        return $this;
     }
 
+    /**
+     * @param string $text
+     * @return ContactTime
+     */
+    public function setText(string $text): ContactTime
+    {
+        $this->text = $text;
+        return $this;
+    }
 
 }

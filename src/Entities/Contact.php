@@ -10,132 +10,164 @@ class Contact extends BaseEntity
     /**
      * https://naturhouseapiv2.docs.apiary.io/#reference/0/contact/create-new-contact
      */
-    const SEX_MALE = 0;
-    const SEX_FEMALE = 1;
-    const SEX_KID = 2;
+    public const SEX_MALE = 0;
+    public const SEX_FEMALE = 1;
+    public const SEX_KID = 2;
+    public const STATE_NEW = 'new';
+    public const STATE_VALID = 'valid';
+    public const STATE_DISCARD = 'discard';
+    public const STATE_BUSSY = 'bussy';
+    public const STATE_REFUND_REQUEST = 'refund_request';
+    public const STATE_REFUND = 'refund';
+    public const STATE_STORNO = 'storno';
 
+
+    /**
+     * @var int|null
+     */
+    protected $id = null;
     /**
      * @var string
      * @required
      * first name
      */
-    private $fname;
+    protected $fname;
     /**
      * @var string
      * @required
      * last name
      */
-    private $lname;
+    protected $lname;
     /**
      * @var string
      * @required
      * phone +420XXXXXXXXX
      */
-    private $phone;
+    protected $phone;
     /**
      * @var string
      * email
      */
-    private $email;
+    protected $email;
+    /**
+     * @var string
+     */
+    protected $state = self::STATE_NEW;
     /**
      * @var int
      * @required
      * branch ID from list of branches, branch has to be active!
      * if your API token supports insert without branch, branch ID is not required
      */
-    private $branch;
+    protected $branch;
     /**
      * @var Package[]
      */
-    private $packages;
+    protected $packages;
     /**
      * @var string
      */
-    private $zip;
+    protected $zip;
     /**
      * @var int
      * call time ID
      */
-    private $callTime;
+    protected $callTime;
     /**
      * @var int
      * source ID, if your token doesn't support setting source ID, it will be overwritten by API
      * source ID should be set based on information from Naturhouse
      */
-    private $source = 3;
+    protected $source = 3;
     /**
      * @var int
      * phone number existence verification flag, should be 1 if phone was verified by SMS
      * 0 ... not verified contact
      * 1 ... verified contact
      */
-    private $verified = 0;
+    protected $verified = 0;
     /**
      * @var string
      */
-    private $interest;
+    protected $interest;
     /**
      * @var int
      * 0 ... male
      * 1 ... female
      * 2 ... kid
      */
-    private $sex = self::SEX_MALE;
+    protected $sex = self::SEX_MALE;
     /**
      * @var int
      * year of bird
      */
-    private $yob;
+    protected $yob;
     /**
      * @var float
      * client weight in [kg]
      */
-    private $weight;
+    protected $weight;
     /**
      * @var float
      * target weight in [kg]
      */
-    private $targetWeight;
+    protected $targetWeight;
     /**
      * @var int
      * client height in [cm]
      */
-    private $height;
+    protected $height;
     /**
      * @var string
      */
-    private $job;
+    protected $job;
     /**
      * @var string
      * health description
      */
-    private $health;
+    protected $health;
     /**
      * @var string
      * description of physical activities of client
      */
-    private $activities;
+    protected $activities;
     /**
      * @var string
      */
-    private $utmMedium;
+    protected $utmMedium;
     /**
      * @var string
      */
-    private $utmContent;
+    protected $utmContent;
     /**
      * @var string
      */
-    private $utmTerm;
+    protected $utmTerm;
     /**
      * @var string
      */
-    private $utmCampaign;
+    protected $utmCampaign;
     /**
      * @var string
      * custom note - this note is displayed to operator, when during order call with client
      */
-    private $note;
+    protected $note;
+
+    /**
+     * Branch constructor.
+     * @param array|null
+     */
+    public function __construct($data = null)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => $val) {
+                $method = str_replace('_', '', 'set' . ucwords($key, '_'));
+                if (method_exists($this, $method)) {
+                    $this->$method($val);
+                }
+            }
+        }
+    }
 
     /**
      * @return string
@@ -519,6 +551,38 @@ class Contact extends BaseEntity
     public function setNote($note)
     {
         $this->note = $note;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param string $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 
 

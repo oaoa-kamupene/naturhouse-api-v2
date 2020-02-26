@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Naturhouse\exceptions;
+namespace Naturhouse\Exceptions;
 
 
 class MissingParameterException extends \Exception
