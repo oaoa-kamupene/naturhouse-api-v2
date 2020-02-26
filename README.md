@@ -1,6 +1,8 @@
 # Naturhouse CRM sample PHP client library
 
 This library is open source client library for Naturhouse CRM, mainly for support affiliate partners.
+API description https://naturhouseapiv2.docs.apiary.io/
+
 
 **Naturhouse public API supports**:
 - get list of branches
